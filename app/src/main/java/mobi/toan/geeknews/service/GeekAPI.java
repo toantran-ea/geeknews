@@ -1,8 +1,16 @@
 package mobi.toan.geeknews.service;
 
+import android.util.Log;
+
+import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
 
 import mobi.toan.geeknews.Constants;
+import okio.Buffer;
 import retrofit.JacksonConverterFactory;
 import retrofit.Retrofit;
 
@@ -18,6 +26,7 @@ public class GeekAPI {
 
     private GeekAPI() {
         OkHttpClient client = new OkHttpClient();
+        client.interceptors().add(new LoggingInterceptor());
         Retrofit restAdapter = new Retrofit.Builder()
                 .baseUrl(Constants.API_URL).addConverterFactory(JacksonConverterFactory.create())
                 .client(client)
