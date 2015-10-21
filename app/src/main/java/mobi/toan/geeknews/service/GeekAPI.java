@@ -1,12 +1,11 @@
 package mobi.toan.geeknews.service;
 
-import android.util.Log;
-
 import com.squareup.okhttp.OkHttpClient;
 
 import mobi.toan.geeknews.Constants;
-import retrofit.RestAdapter;
-import retrofit.client.OkClient;
+import retrofit.JacksonConverterFactory;
+import retrofit.Retrofit;
+
 
 /**
  * Created by toantran on 10/19/15.
@@ -19,18 +18,10 @@ public class GeekAPI {
 
     private GeekAPI() {
         OkHttpClient client = new OkHttpClient();
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(Constants.API_URL)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setLog(new RestAdapter.Log() {
-                    @Override
-                    public void log(String message) {
-                        Log.d(TAG, message);
-                    }
-                }).setConverter(new JacksonConverter())
-                .setClient(new OkClient(client))
+        Retrofit restAdapter = new Retrofit.Builder()
+                .baseUrl(Constants.API_URL).addConverterFactory(JacksonConverterFactory.create())
+                .client(client)
                 .build();
-
         mService = restAdapter.create(NewsService.class);
     }
 
