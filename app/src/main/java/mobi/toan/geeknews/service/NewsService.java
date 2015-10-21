@@ -8,6 +8,7 @@ import retrofit.Call;
 import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Headers;
+import retrofit.http.Query;
 
 /**
  * Created by toantran on 10/13/15.
@@ -15,6 +16,6 @@ import retrofit.http.Headers;
 public interface NewsService {
 
     @Headers("Content-Type: application/json")
-    @GET("/v1/sources/github/popular?page=1&size=20")
-    Call<List<GitHubItem>> getGitHubNews();
+    @GET("/v1/sources/github/popular")
+    Call<List<GitHubItem>> getGitHubNews(@Query("page") int page, @Query("size") int size);
 }

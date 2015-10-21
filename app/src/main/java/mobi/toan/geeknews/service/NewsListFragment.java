@@ -69,7 +69,7 @@ public class NewsListFragment extends Fragment {
     }
 
     private void loadNews() {
-        Call<List<GitHubItem>> gitHubNewsCall = GeekAPI.getInstance().getService().getGitHubNews();
+        Call<List<GitHubItem>> gitHubNewsCall = GeekAPI.getInstance().getService().getGitHubNews(1, 30);
         gitHubNewsCall.enqueue(new Callback<List<GitHubItem>>() {
             @Override
             public void onResponse(Response<List<GitHubItem>> response, Retrofit retrofit) {

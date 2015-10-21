@@ -9,8 +9,6 @@ import com.squareup.okhttp.ResponseBody;
 
 import java.io.IOException;
 
-import okio.Buffer;
-
 /**
  * Created by toantran on 10/21/15.
  */
