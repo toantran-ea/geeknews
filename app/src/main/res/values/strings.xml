@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GeekNews</string>
+    <string name="action_news_sources">News Sources</string>
 </resources>
