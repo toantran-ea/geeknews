@@ -1,4 +1,4 @@
-package mobi.toan.geeknews.service;
+package mobi.toan.geeknews;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,10 +13,13 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import mobi.toan.geeknews.R;
-import mobi.toan.geeknews.models.net.GitHubItem;
+import de.greenrobot.event.EventBus;
+import mobi.toan.geeknews.models.bus.NewsSelectedMessage;
+import mobi.toan.geeknews.models.net.GithubItem;
+import mobi.toan.geeknews.service.GeekAPI;
 import mobi.toan.geeknews.views.DividerItemDecoration;
 import mobi.toan.geeknews.views.NewsAdapter;
+import mobi.toan.geeknews.views.RecyclerItemClickListener;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
@@ -44,7 +47,7 @@ public class NewsListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRootView = View.inflate(getActivity(), R.layout.news_list_content, null);
+        mRootView = View.inflate(getActivity(), R.layout.fragment_news_list_content, null);
         return mRootView;
     }
 
@@ -63,16 +66,25 @@ public class NewsListFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                GithubItem githubItem = mAdapter.getItem(position);
+                NewsSelectedMessage message  = new NewsSelectedMessage(githubItem.getSource().getTargetUrl(), githubItem.getTitle());
+                EventBus.getDefault().post(message);
+                Log.e(TAG, githubItem.toString());
+            }
+        }));
 
-        mAdapter = new NewsAdapter(getActivity(), new ArrayList<GitHubItem>());
+        mAdapter = new NewsAdapter(getActivity(), new ArrayList<GithubItem>());
         mRecyclerView.setAdapter(mAdapter);
     }
 
     private void loadNews() {
-        Call<List<GitHubItem>> gitHubNewsCall = GeekAPI.getInstance().getService().getGitHubNews(1, 30);
-        gitHubNewsCall.enqueue(new Callback<List<GitHubItem>>() {
+        Call<List<GithubItem>> gitHubNewsCall = GeekAPI.getInstance().getService().getGitHubNews(1, 30);
+        gitHubNewsCall.enqueue(new Callback<List<GithubItem>>() {
             @Override
-            public void onResponse(Response<List<GitHubItem>> response, Retrofit retrofit) {
+            public void onResponse(Response<List<GithubItem>> response, Retrofit retrofit) {
                 mAdapter.updateDataSet(response.body());
             }
 
