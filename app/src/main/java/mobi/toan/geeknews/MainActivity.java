@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             mDetailFragment.getWebView().goBack();
             return;
         } else {
-            if(!mDetailFragment.getWebView().canGoBack()) {
+            if( mDetailFragment.getWebView() != null && !mDetailFragment.getWebView().canGoBack()) {
                 getSupportActionBar().setTitle(GITHUB_TRENDING_TITLE);
             }
         }
