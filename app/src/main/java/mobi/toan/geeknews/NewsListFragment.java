@@ -3,6 +3,7 @@ package mobi.toan.geeknews;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -34,6 +35,7 @@ public class NewsListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private NewsAdapter mAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public static NewsListFragment newInstance() {
         return new NewsListFragment();
@@ -60,9 +62,17 @@ public class NewsListFragment extends Fragment {
 
     private void initUI() {
         mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.news_list);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.swipe_refresh_layout);
+
+        // When user pulls down the list to refresh news list.
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadNews();
+            }
+        });
 
         mRecyclerView.setHasFixedSize(true);
-
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
@@ -80,17 +90,22 @@ public class NewsListFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    /**
+     * Loads the news from sources.
+     */
     private void loadNews() {
         Call<List<GithubItem>> gitHubNewsCall = GeekAPI.getInstance().getService().getGitHubNews(1, 30);
         gitHubNewsCall.enqueue(new Callback<List<GithubItem>>() {
             @Override
             public void onResponse(Response<List<GithubItem>> response, Retrofit retrofit) {
                 mAdapter.updateDataSet(response.body());
+                mSwipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Throwable t) {
                 Log.e(TAG, t.getMessage());
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
     }
