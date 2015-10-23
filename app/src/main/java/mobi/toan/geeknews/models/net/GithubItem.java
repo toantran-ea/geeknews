@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * Created by toantran on 10/19/15.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GitHubItem {
+public class GithubItem {
     private String title;
 
     private String description;
@@ -59,7 +59,7 @@ public class GitHubItem {
 
     @Override
     public String toString() {
-        return "GitHubItem{" +
+        return "GithubItem{" +
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", source=" + source +
