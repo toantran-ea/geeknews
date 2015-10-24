@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_hackernews"
+            android:icon="@drawable/hackernews"
+            android:title="@string/hackernews" />
+        <item
+            android:id="@+id/nav_lobsters"
+            android:icon="@drawable/lobsters"
+            android:title="@string/lobsters" />
+        <item
+            android:id="@+id/nav_product_hunt"
+            android:icon="@drawable/producthunt"
+            android:title="@string/production_hunt" />
+        <item
+            android:id="@+id/nav_sidebar"
+            android:icon="@drawable/sidebar"
+            android:title="@string/sidebar" />
+        <item
+            android:id="@+id/nav_fastcompany"
+            android:icon="@drawable/fastcompany"
+            android:title="@string/fastcompany" />
+        <item
+            android:id="@+id/nav_designernews"
+            android:icon="@drawable/designernews"
+            android:title="@string/designernews" />
+        <item
+            android:id="@+id/nav_alistapart"
+            android:icon="@drawable/alistapart"
+            android:title="@string/alistapart" />
+        <item
+            android:id="@+id/nav_datatau"
+            android:icon="@drawable/datatau"
+            android:title="@string/datatau" />
+        <item
+            android:id="@+id/nav_dzone"
+            android:icon="@drawable/dzone"
+            android:title="@string/dzone" />
+        <item
+            android:id="@+id/nav_echojs"
+            android:icon="@drawable/echojs"
+            android:title="@string/echojs" />
+        <item
+            android:id="@+id/nav_fastcodesign"
+            android:icon="@drawable/fastcodesign"
+            android:title="@string/fastcodesigner" />
+        <item
+            android:id="@+id/nav_frontendfront"
+            android:icon="@drawable/frontendfront"
+            android:title="@string/frontendfront" />
+        <item
+            android:id="@+id/nav_growthhackers"
+            android:icon="@drawable/growthhackers"
+            android:title="@string/growthhackers" />
+        <item
+            android:id="@+id/nav_hackingui"
+            android:icon="@drawable/hackingui"
+            android:title="@string/hackingui" />
+        <item
+            android:id="@+id/nav_inbound"
+            android:icon="@drawable/inbound"
+            android:title="@string/inbound" />
+        <item
+            android:id="@+id/nav_littlebigdetails"
+            android:icon="@drawable/littlebigdetails"
+            android:title="@string/littlebigdetails" />
+        <item
+            android:id="@+id/nav_mashable"
+            android:icon="@drawable/mashable"
+            android:title="@string/mashable" />
+        <item
+            android:id="@+id/nav_medium"
+            android:icon="@drawable/medium"
+            android:title="@string/medium" />
+        <item
+            android:id="@+id/nav_recode"
+            android:icon="@drawable/recode"
+            android:title="@string/recode" />
+        <item
+            android:id="@+id/nav_researchers"
+            android:icon="@drawable/researchers"
+            android:title="@string/researchers" />
+        <item
+            android:id="@+id/nav_smashingmagazine"
+            android:icon="@drawable/smashing"
+            android:title="@string/smashingmagazine" />
+        <item
+            android:id="@+id/nav_swissmiss"
+            android:icon="@drawable/swissmiss"
+            android:title="@string/swissmiss" />
+        <item
+            android:id="@+id/nav_github"
+            android:icon="@drawable/github"
+            android:title="@string/github" />
+        <item
+            android:id="@+id/nav_angel"
+            android:icon="@drawable/angel"
+            android:title="Angel" />
+        <item
+            android:id="@+id/nav_betalist"
+            android:icon="@drawable/betalist"
+            android:title="Beta List" />
+        <item
+            android:id="@+id/nav_csstricks"
+            android:icon="@drawable/csstricks"
+            android:title="CSS-Tricks" />
+        <item
+            android:id="@+id/nav_techcrunch"
+            android:icon="@drawable/techcrunch"
+            android:title="@string/techcrunch" />
+        <item
+            android:id="@+id/nav_thenextweb"
+            android:icon="@drawable/thenextweb"
+            android:title="@string/thenextweb" />
+        <item
+            android:id="@+id/nav_theverge"
+            android:icon="@drawable/theverge"
+            android:title="@string/theverge" />
+        <item
+            android:id="@+id/nav_uxhandy"
+            android:icon="@drawable/uxhandy"
+            android:title="@string/uxhandy" />
+        <item
+            android:id="@+id/nav_webdesignernews"
+            android:icon="@drawable/webdesignernews"
+            android:title="@string/webdesignernews" />
+        <item
+            android:id="@+id/nav_wired"
+            android:icon="@drawable/wired"
+            android:title="@string/wired" />
+    </group>
+</menu>

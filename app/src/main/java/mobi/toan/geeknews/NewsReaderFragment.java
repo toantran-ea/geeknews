@@ -18,22 +18,22 @@ import com.cjj.SnailBar;
 /**
  * Created by toantran on 10/21/15.
  */
-public class NewsDetailFragment extends Fragment {
+public class NewsReaderFragment extends Fragment {
     private static final String TARGET_URL = "target-url";
-    private static final String TAG = NewsDetailFragment.class.getSimpleName();
+    private static final String TAG = NewsReaderFragment.class.getSimpleName();
     private View mRootView;
     private String mTargetUrl;
     private WebView mWebView;
 
-    public static NewsDetailFragment newInstance(String targetUrl) {
-        NewsDetailFragment fragment = new NewsDetailFragment();
+    public static NewsReaderFragment newInstance(String targetUrl) {
+        NewsReaderFragment fragment = new NewsReaderFragment();
         Bundle bundle = new Bundle();
         bundle.putString(TARGET_URL, targetUrl);
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    public NewsDetailFragment() {
+    public NewsReaderFragment() {
     }
 
     @Override
@@ -86,6 +86,7 @@ public class NewsDetailFragment extends Fragment {
             }
 
             @Override
+            @Nullable
             public void onReceivedTitle(WebView view, String title) {
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
             }

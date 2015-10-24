@@ -1,23 +1,29 @@
 package mobi.toan.geeknews;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
 import mobi.toan.geeknews.models.bus.NewsSelectedMessage;
-import mobi.toan.geeknews.models.net.GithubItem;
+import mobi.toan.geeknews.models.bus.SourceSelectedMessage;
+import mobi.toan.geeknews.models.net.NewsItem;
 import mobi.toan.geeknews.service.GeekAPI;
+import mobi.toan.geeknews.utils.SourcesResolver;
 import mobi.toan.geeknews.views.DividerItemDecoration;
 import mobi.toan.geeknews.views.NewsAdapter;
 import mobi.toan.geeknews.views.RecyclerItemClickListener;
@@ -56,8 +62,13 @@ public class NewsListFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        EventBus.getDefault().register(this);
         initUI();
-        loadNews();
+        loadNews(getSource());
+    }
+
+    public void onEvent(SourceSelectedMessage message) {
+        loadNews(message.getSource());
     }
 
     private void initUI() {
@@ -68,7 +79,8 @@ public class NewsListFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadNews();
+                Toast.makeText(getActivity(), getSource(), Toast.LENGTH_SHORT).show();
+                loadNews(getSource());
             }
         });
 
@@ -79,25 +91,25 @@ public class NewsListFragment extends Fragment {
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                GithubItem githubItem = mAdapter.getItem(position);
-                NewsSelectedMessage message  = new NewsSelectedMessage(githubItem.getSource().getTargetUrl(), githubItem.getTitle());
+                NewsItem newsItem = mAdapter.getItem(position);
+                NewsSelectedMessage message  = new NewsSelectedMessage(newsItem.getSource().getTargetUrl(), newsItem.getTitle());
                 EventBus.getDefault().post(message);
-                Log.e(TAG, githubItem.toString());
+                Log.e(TAG, newsItem.toString());
             }
         }));
 
-        mAdapter = new NewsAdapter(getActivity(), new ArrayList<GithubItem>());
+        mAdapter = new NewsAdapter(getActivity(), new ArrayList<NewsItem>());
         mRecyclerView.setAdapter(mAdapter);
     }
 
     /**
      * Loads the news from sources.
      */
-    private void loadNews() {
-        Call<List<GithubItem>> gitHubNewsCall = GeekAPI.getInstance().getService().getGitHubNews(1, 30);
-        gitHubNewsCall.enqueue(new Callback<List<GithubItem>>() {
+    private void loadNews(String source) {
+        Call<List<NewsItem>> gitHubNewsCall = GeekAPI.getInstance().getService().getNewsList(source, Criteria.LATEST, 1, 30);
+        gitHubNewsCall.enqueue(new Callback<List<NewsItem>>() {
             @Override
-            public void onResponse(Response<List<GithubItem>> response, Retrofit retrofit) {
+            public void onResponse(Response<List<NewsItem>> response, Retrofit retrofit) {
                 mAdapter.updateDataSet(response.body());
                 mSwipeRefreshLayout.setRefreshing(false);
             }
@@ -108,5 +120,11 @@ public class NewsListFragment extends Fragment {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(SourcesResolver.getBeautifulName(getActivity(), source));
+    }
+
+    private String getSource() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SETTINGS, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(Constants.SOURCE, Sources.GITHUB);
     }
 }

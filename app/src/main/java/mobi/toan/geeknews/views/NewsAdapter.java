@@ -11,16 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mobi.toan.geeknews.R;
-import mobi.toan.geeknews.models.net.GithubItem;
+import mobi.toan.geeknews.models.net.NewsItem;
 
 /**
  * Created by toantran on 10/20/15.
  */
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
-    private List<GithubItem> mDataSet;
+    private List<NewsItem> mDataSet;
     private Context mContext;
 
-    public NewsAdapter(Context context, List<GithubItem> dataSet) {
+    public NewsAdapter(Context context, List<NewsItem> dataSet) {
         if(dataSet != null) {
             mDataSet = dataSet;
         } else {
@@ -29,9 +29,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         mContext = context;
     }
 
-    public void updateDataSet(List<GithubItem> items) {
+    public void updateDataSet(List<NewsItem> items) {
         mDataSet.clear();
-        mDataSet.addAll(items);
+        if(items != null) {
+            mDataSet.addAll(items);
+        }
         notifyDataSetChanged();
     }
 
@@ -44,7 +46,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        GithubItem item = mDataSet.get(position);
+        NewsItem item = mDataSet.get(position);
         holder.description.setText(item.getDescription());
         holder.title.setText(String.format("%s. %s", position + 1, item.getTitle()));
     }
@@ -65,7 +67,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         }
     }
 
-    public GithubItem getItem(int position) {
+    public NewsItem getItem(int position) {
         if(mDataSet.size() > position || position > -1) {
             return mDataSet.get(position);
         }

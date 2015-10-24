@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hackernews">Hacker News</string>
+    <string name="lobsters">Lobsters</string>
+    <string name="production_hunt">Production Hunt</string>
+    <string name="sidebar">Sidebar</string>
+    <string name="fastcompany">FastCompany</string>
+    <string name="designernews">Designer News</string>
+    <string name="alistapart">A List Apart</string>
+    <string name="datatau">DataTau</string>
+    <string name="dzone">DZone</string>
+    <string name="echojs">Echo JS</string>
+    <string name="fastcodesigner">Fast Co.Design</string>
+    <string name="frontendfront">Front-End Front</string>
+    <string name="growthhackers">GrowthHackers</string>
+    <string name="hackingui">HackingUI</string>
+    <string name="inbound">INBOUND</string>
+    <string name="littlebigdetails">Litle Big Details</string>
+    <string name="mashable">Mashable</string>
+    <string name="medium">Medium</string>
+    <string name="recode">Re/code</string>
+    <string name="researchers">Researchers</string>
+    <string name="smashingmagazine">Smashing Magazine</string>
+    <string name="swissmiss">SWISS MISS</string>
+    <string name="github">Github Trending</string>
+    <string name="angel">Angel</string>
+    <string name="beta_list">Beta List</string>
+    <string name="csstricks">CSS Tricks</string>
+    <string name="techcrunch">TechCrunch</string>
+    <string name="thenextweb">The Next Web</string>
+    <string name="theverge">The Verge</string>
+    <string name="uxhandy">UX Handy</string>
+    <string name="webdesignernews">Web Designer News</string>
+    <string name="wired">Wired</string>
+</resources>

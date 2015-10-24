@@ -1,27 +1,46 @@
 package mobi.toan.geeknews;
 
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import de.greenrobot.event.EventBus;
 import mobi.toan.geeknews.models.bus.NewsSelectedMessage;
+import mobi.toan.geeknews.models.bus.SourceSelectedMessage;
+import mobi.toan.geeknews.utils.SourcesResolver;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final String NEWS_LIST_TAG = "NEWS_LIST";
     private static final String NEWS_DETAIL_TAG = "NEWS_DETAIL";
-    private static final String GITHUB_TRENDING_TITLE = "Github trending";
 
-    private NewsDetailFragment mDetailFragment;
+    private NewsReaderFragment mDetailFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setItemIconTintList(null);
 
         NewsListFragment fragment = NewsListFragment.newInstance();
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -29,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         EventBus.getDefault().register(this);
 
-        getSupportActionBar().setTitle(GITHUB_TRENDING_TITLE);
+        getSupportActionBar().setTitle(SourcesResolver.getBeautifulName(this, getSource()));
     }
 
     @Override
@@ -57,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onEvent(NewsSelectedMessage event) {
-        mDetailFragment = NewsDetailFragment.newInstance(event.getTargetUrl());
+        mDetailFragment = NewsReaderFragment.newInstance(event.getTargetUrl());
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.fragment_holder, mDetailFragment, NEWS_DETAIL_TAG).addToBackStack(null).commit();
     }
@@ -70,10 +89,32 @@ public class MainActivity extends AppCompatActivity {
             return;
         } else {
             if( mDetailFragment.getWebView() != null && !mDetailFragment.getWebView().canGoBack()) {
-                getSupportActionBar().setTitle(GITHUB_TRENDING_TITLE);
+                getSupportActionBar().setTitle(SourcesResolver.getBeautifulName(this, getSource()));
             }
         }
 
         super.onBackPressed();
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        String source = SourcesResolver.resolve(item.getItemId());
+        SourceSelectedMessage message = new SourceSelectedMessage(source);
+        saveSource(source);
+        EventBus.getDefault().post(message);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void saveSource(String source) {
+        SharedPreferences pref = getSharedPreferences(Constants.SETTINGS, Context.MODE_PRIVATE);
+        pref.edit().putString(Constants.SOURCE, source).commit();
+    }
+
+    private String getSource() {
+        return getSharedPreferences(Constants.SETTINGS, Context.MODE_PRIVATE).getString(Constants.SOURCE, Sources.GITHUB);
     }
 }

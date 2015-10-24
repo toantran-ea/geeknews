@@ -2,4 +2,7 @@
     <string name="app_name">GeekNews</string>
     <string name="action_news_sources">News Sources</string>
     <string name="message_empty_content_showing">There is nothing to show with this content!</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
