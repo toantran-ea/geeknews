@@ -1,4 +1,4 @@
-package mobi.toan.geeknews;
+package mobi.toan.geeknews.viewcontrollers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,6 +15,9 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import de.greenrobot.event.EventBus;
+import mobi.toan.geeknews.R;
+import mobi.toan.geeknews.constants.Constants;
+import mobi.toan.geeknews.constants.Sources;
 import mobi.toan.geeknews.models.bus.NewsSelectedMessage;
 import mobi.toan.geeknews.models.bus.SourceSelectedMessage;
 import mobi.toan.geeknews.utils.SourcesResolver;

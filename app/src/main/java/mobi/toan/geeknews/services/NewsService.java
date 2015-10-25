@@ -1,4 +1,4 @@
-package mobi.toan.geeknews.service;
+package mobi.toan.geeknews.services;
 
 import java.util.List;
 

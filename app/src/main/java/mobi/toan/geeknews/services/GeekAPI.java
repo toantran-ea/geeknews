@@ -1,10 +1,10 @@
-package mobi.toan.geeknews.service;
+package mobi.toan.geeknews.services;
 
 import com.squareup.okhttp.OkHttpClient;
 
 import java.util.concurrent.TimeUnit;
 
-import mobi.toan.geeknews.Constants;
+import mobi.toan.geeknews.constants.Constants;
 import retrofit.JacksonConverterFactory;
 import retrofit.Retrofit;
 

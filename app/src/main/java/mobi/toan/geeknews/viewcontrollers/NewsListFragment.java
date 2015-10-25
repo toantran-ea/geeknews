@@ -1,4 +1,4 @@
-package mobi.toan.geeknews;
+package mobi.toan.geeknews.viewcontrollers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -19,10 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
+import mobi.toan.geeknews.R;
+import mobi.toan.geeknews.constants.Constants;
+import mobi.toan.geeknews.constants.Criteria;
+import mobi.toan.geeknews.constants.Sources;
 import mobi.toan.geeknews.models.bus.NewsSelectedMessage;
 import mobi.toan.geeknews.models.bus.SourceSelectedMessage;
 import mobi.toan.geeknews.models.net.NewsItem;
-import mobi.toan.geeknews.service.GeekAPI;
+import mobi.toan.geeknews.services.GeekAPI;
 import mobi.toan.geeknews.utils.SourcesResolver;
 import mobi.toan.geeknews.views.DividerItemDecoration;
 import mobi.toan.geeknews.views.NewsAdapter;

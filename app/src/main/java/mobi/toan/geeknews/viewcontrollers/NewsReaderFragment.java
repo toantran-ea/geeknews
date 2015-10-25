@@ -1,4 +1,4 @@
-package mobi.toan.geeknews;
+package mobi.toan.geeknews.viewcontrollers;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +14,8 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.cjj.SnailBar;
+
+import mobi.toan.geeknews.R;
 
 /**
  * Created by toantran on 10/21/15.

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import mobi.toan.geeknews.R;
-import mobi.toan.geeknews.Sources;
+import mobi.toan.geeknews.constants.Sources;
 
 /**
  * Created by toantran on 10/23/15.

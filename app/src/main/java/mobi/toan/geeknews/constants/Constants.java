@@ -1,4 +1,4 @@
-package mobi.toan.geeknews;
+package mobi.toan.geeknews.constants;
 
 /**
  * Created by toantran on 10/19/15.
