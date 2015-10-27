@@ -1,4 +1,4 @@
-package mobi.toan.geeknews.viewcontrollers;
+package mobi.toan.geeknews.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,7 +15,11 @@ import android.widget.Toast;
 
 import com.cjj.SnailBar;
 
+import de.greenrobot.event.EventBus;
 import mobi.toan.geeknews.R;
+import mobi.toan.geeknews.models.bus.BackPressedEvent;
+import mobi.toan.geeknews.utils.PrefUtils;
+import mobi.toan.geeknews.utils.SourcesResolver;
 
 /**
  * Created by toantran on 10/21/15.
@@ -23,6 +27,7 @@ import mobi.toan.geeknews.R;
 public class NewsReaderFragment extends Fragment {
     private static final String TARGET_URL = "target-url";
     private static final String TAG = NewsReaderFragment.class.getSimpleName();
+    private static final int HIDE_PROGRESS_LEVEL = 80;
     private View mRootView;
     private String mTargetUrl;
     private WebView mWebView;
@@ -42,8 +47,17 @@ public class NewsReaderFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
-        if(bundle != null && bundle.containsKey(TARGET_URL)) {
+        if (bundle != null && bundle.containsKey(TARGET_URL)) {
             mTargetUrl = bundle.getString(TARGET_URL);
+        }
+        EventBus.getDefault().register(this);
+    }
+
+    public void onEvent(BackPressedEvent event) {
+        if (mWebView.canGoBack()) {
+            mWebView.goBack();
+        } else {
+            getActivity().finish();
         }
     }
 
@@ -70,6 +84,8 @@ public class NewsReaderFragment extends Fragment {
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setAllowFileAccess(true);
         mWebView.getSettings().setAllowContentAccess(true);
+        mWebView.getSettings().setBuiltInZoomControls(true);
+        mWebView.getSettings().setDisplayZoomControls(false);
         mWebView.setScrollbarFadingEnabled(false);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
@@ -82,7 +98,7 @@ public class NewsReaderFragment extends Fragment {
             @Override
             public void onProgressChanged(WebView view, int progress) {
                 progressBar.setProgress(progress);
-                if (progress >= 55) {
+                if (progress >= HIDE_PROGRESS_LEVEL) {
                     progressBar.setVisibility(View.GONE);
                 }
             }
@@ -94,14 +110,11 @@ public class NewsReaderFragment extends Fragment {
             }
         });
 
-        if(!TextUtils.isEmpty(mTargetUrl)) {
+        if (!TextUtils.isEmpty(mTargetUrl)) {
             mWebView.loadUrl(mTargetUrl);
         } else {
             Toast.makeText(getActivity(), R.string.message_empty_content_showing, Toast.LENGTH_SHORT).show();
         }
     }
 
-    public WebView getWebView() {
-        return mWebView;
-    }
 }

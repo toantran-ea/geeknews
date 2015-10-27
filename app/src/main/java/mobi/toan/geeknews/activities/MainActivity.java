@@ -1,14 +1,12 @@
-package mobi.toan.geeknews.viewcontrollers;
+package mobi.toan.geeknews.activities;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,16 +15,13 @@ import android.widget.Toast;
 import de.greenrobot.event.EventBus;
 import mobi.toan.geeknews.R;
 import mobi.toan.geeknews.constants.Constants;
-import mobi.toan.geeknews.constants.Sources;
+import mobi.toan.geeknews.fragments.NewsListFragment;
 import mobi.toan.geeknews.models.bus.NewsSelectedMessage;
 import mobi.toan.geeknews.models.bus.SourceSelectedMessage;
 import mobi.toan.geeknews.utils.SourcesResolver;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends BaseApplicationActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String NEWS_LIST_TAG = "NEWS_LIST";
-    private static final String NEWS_DETAIL_TAG = "NEWS_DETAIL";
-
-    private NewsReaderFragment mDetailFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +56,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -79,23 +79,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void onEvent(NewsSelectedMessage event) {
-        mDetailFragment = NewsReaderFragment.newInstance(event.getTargetUrl());
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.fragment_holder, mDetailFragment, NEWS_DETAIL_TAG).addToBackStack(null).commit();
+        Intent intent = new Intent(this, NewsReaderActivity.class);
+        intent.putExtra(Constants.TARGET_URL, event.getTargetUrl());
+        startActivity(intent);
     }
 
     @Override
     public void onBackPressed() {
-        // Back on the webview scope
-        if (mDetailFragment != null && mDetailFragment.getWebView().canGoBack()) {
-            mDetailFragment.getWebView().goBack();
-            return;
-        } else {
-            if( mDetailFragment.getWebView() != null && !mDetailFragment.getWebView().canGoBack()) {
-                getSupportActionBar().setTitle(SourcesResolver.getBeautifulName(this, getSource()));
-            }
-        }
-
+        getSupportActionBar().setTitle(SourcesResolver.getBeautifulName(this, getSource()));
         super.onBackPressed();
     }
 
@@ -111,13 +102,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    private void saveSource(String source) {
-        SharedPreferences pref = getSharedPreferences(Constants.SETTINGS, Context.MODE_PRIVATE);
-        pref.edit().putString(Constants.SOURCE, source).commit();
-    }
-
-    private String getSource() {
-        return getSharedPreferences(Constants.SETTINGS, Context.MODE_PRIVATE).getString(Constants.SOURCE, Sources.GITHUB);
-    }
 }
+
