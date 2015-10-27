@@ -41,6 +41,8 @@ import retrofit.Retrofit;
  */
 public class NewsListFragment extends Fragment {
     private static final String TAG = NewsListFragment.class.getSimpleName();
+    private static final int PAGE_SIZE = 30;
+    private static final int INIT_PAGE = 1;
     private View mRootView;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -111,7 +113,7 @@ public class NewsListFragment extends Fragment {
      */
     private void loadNews(String source) {
         mAdapter.updateDataSet(null);
-        Call<List<NewsItem>> gitHubNewsCall = GeekAPI.getInstance().getService().getNewsList(source, Criteria.LATEST, 1, 30);
+        Call<List<NewsItem>> gitHubNewsCall = GeekAPI.getInstance().getService().getNewsList(source, source.equals(Sources.GITHUB) ? Criteria.POPULAR : Criteria.LATEST, INIT_PAGE, PAGE_SIZE);
         gitHubNewsCall.enqueue(new Callback<List<NewsItem>>() {
             @Override
             public void onResponse(Response<List<NewsItem>> response, Retrofit retrofit) {
