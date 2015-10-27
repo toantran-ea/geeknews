@@ -7,4 +7,5 @@ public interface Constants {
     String API_URL = "https://api.pnd.gs";
     String SOURCE = "source";
     String SETTINGS = "settings";
+    String TARGET_URL = "target_url";
 }

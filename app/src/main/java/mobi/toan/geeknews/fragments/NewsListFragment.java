@@ -1,4 +1,4 @@
-package mobi.toan.geeknews.viewcontrollers;
+package mobi.toan.geeknews.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;

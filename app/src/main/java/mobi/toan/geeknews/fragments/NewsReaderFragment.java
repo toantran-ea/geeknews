@@ -1,4 +1,4 @@
-package mobi.toan.geeknews.viewcontrollers;
+package mobi.toan.geeknews.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
