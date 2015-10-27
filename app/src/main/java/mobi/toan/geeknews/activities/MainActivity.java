@@ -56,6 +56,11 @@ public class MainActivity extends BaseApplicationActivity implements NavigationV
         return true;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
