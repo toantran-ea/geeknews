@@ -128,8 +128,6 @@ public class NewsListFragment extends Fragment {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
-        Log.e(TAG, "((AppCompatActivity)getActivity()).getSupportActionBar() = " + ((AppCompatActivity) getActivity()).getSupportActionBar());
-        Log.e(TAG, "SourcesResolver.getBeautifulName(getActivity(), source)  = " + SourcesResolver.getBeautifulName(getActivity(), source));
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(SourcesResolver.getBeautifulName(getActivity(), source));
     }
 
