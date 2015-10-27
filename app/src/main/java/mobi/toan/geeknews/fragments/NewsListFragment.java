@@ -110,11 +110,13 @@ public class NewsListFragment extends Fragment {
      * Loads the news from sources.
      */
     private void loadNews(String source) {
+        mAdapter.updateDataSet(null);
         Call<List<NewsItem>> gitHubNewsCall = GeekAPI.getInstance().getService().getNewsList(source, Criteria.LATEST, 1, 30);
         gitHubNewsCall.enqueue(new Callback<List<NewsItem>>() {
             @Override
             public void onResponse(Response<List<NewsItem>> response, Retrofit retrofit) {
                 mAdapter.updateDataSet(response.body());
+                mRecyclerView.scrollToPosition(0);
                 mSwipeRefreshLayout.setRefreshing(false);
             }
 
@@ -124,6 +126,8 @@ public class NewsListFragment extends Fragment {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
+        Log.e(TAG, "((AppCompatActivity)getActivity()).getSupportActionBar() = " + ((AppCompatActivity) getActivity()).getSupportActionBar());
+        Log.e(TAG, "SourcesResolver.getBeautifulName(getActivity(), source)  = " + SourcesResolver.getBeautifulName(getActivity(), source));
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(SourcesResolver.getBeautifulName(getActivity(), source));
     }
 
