@@ -48,6 +48,7 @@ public class NewsListFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private NewsAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private List<NewsItem> mDataSet = new ArrayList<>();
 
     public static NewsListFragment newInstance() {
         return new NewsListFragment();
@@ -98,13 +99,23 @@ public class NewsListFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 NewsItem newsItem = mAdapter.getItem(position);
-                NewsSelectedMessage message  = new NewsSelectedMessage(newsItem.getSource().getTargetUrl(), newsItem.getTitle());
+                NewsSelectedMessage message = new NewsSelectedMessage(newsItem.getSource().getTargetUrl(), newsItem.getTitle());
                 EventBus.getDefault().post(message);
                 Log.e(TAG, newsItem.toString());
             }
         }));
 
-        mAdapter = new NewsAdapter(getActivity(), new ArrayList<NewsItem>());
+        mAdapter = new NewsAdapter(getActivity(), mDataSet);
+        mAdapter.setOnLoadMoreListener(new NewsAdapter.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                //add progress item
+                mDataSet.add(null);
+                mAdapter.notifyItemInserted(mDataSet.size() - 1);
+                loadNews(getSource());
+                System.out.println("load");
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -120,12 +131,14 @@ public class NewsListFragment extends Fragment {
                 mAdapter.updateDataSet(response.body());
                 mRecyclerView.scrollToPosition(0);
                 mSwipeRefreshLayout.setRefreshing(false);
+                finishLoadingMore();
             }
 
             @Override
             public void onFailure(Throwable t) {
                 Log.e(TAG, t.getMessage());
                 mSwipeRefreshLayout.setRefreshing(false);
+                finishLoadingMore();
             }
         });
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(SourcesResolver.getBeautifulName(getActivity(), source));
@@ -134,5 +147,18 @@ public class NewsListFragment extends Fragment {
     private String getSource() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SETTINGS, Context.MODE_PRIVATE);
         return sharedPreferences.getString(Constants.SOURCE, Sources.GITHUB);
+    }
+
+    private void finishLoadingMore() {
+        if(mAdapter.isLoading()) {
+            mDataSet.remove(mDataSet.size() - 1);
+            mAdapter.notifyItemRemoved(mDataSet.size());
+            //add items one by one
+            for (int i = 0; i < mDataSet.size(); i++) {
+                mAdapter.notifyItemInserted(mDataSet.size());
+            }
+            mAdapter.setLoaded();
+            //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
+        }
     }
 }
