@@ -24,7 +24,7 @@ public class GeekAPI {
         client.setReadTimeout(TIMEOUT, TimeUnit.MILLISECONDS);
         client.setWriteTimeout(TIMEOUT, TimeUnit.MILLISECONDS);
         client.setRetryOnConnectionFailure(true);
-        client.interceptors().add(new LoggingInterceptor());
+        client.interceptors().add(new LoggingInterceptor(LoggingInterceptor.LOG_LEVEL_SIMPLE));
         Retrofit restAdapter = new Retrofit.Builder()
                 .baseUrl(Constants.API_URL).addConverterFactory(JacksonConverterFactory.create())
                 .client(client)
