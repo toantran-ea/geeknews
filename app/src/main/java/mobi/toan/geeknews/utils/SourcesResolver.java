@@ -74,6 +74,8 @@ public class SourcesResolver {
                 return Sources.WEBDESIGNERNEWS;
             case R.id.nav_wired:
                 return Sources.WIRED;
+            case R.id.nav_lobsters:
+                return Sources.LOBSTERS;
         }
         return Sources.GITHUB;
     }
