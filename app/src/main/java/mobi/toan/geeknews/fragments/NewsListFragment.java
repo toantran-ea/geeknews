@@ -9,7 +9,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +26,7 @@ import mobi.toan.geeknews.models.bus.NewsSelectedMessage;
 import mobi.toan.geeknews.models.bus.SourceSelectedMessage;
 import mobi.toan.geeknews.models.net.NewsItem;
 import mobi.toan.geeknews.services.GeekAPI;
+import mobi.toan.geeknews.utils.LogUtil;
 import mobi.toan.geeknews.utils.SourcesResolver;
 import mobi.toan.geeknews.views.DividerItemDecoration;
 import mobi.toan.geeknews.views.NewsAdapter;
@@ -49,6 +49,7 @@ public class NewsListFragment extends Fragment {
     private NewsAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private List<NewsItem> mDataSet = new ArrayList<>();
+    private int mCurrentPage = INIT_PAGE;
 
     public static NewsListFragment newInstance() {
         return new NewsListFragment();
@@ -71,11 +72,11 @@ public class NewsListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         EventBus.getDefault().register(this);
         initUI();
-        loadNews(getSource());
+        loadNews(getSource(), mCurrentPage);
     }
 
     public void onEvent(SourceSelectedMessage message) {
-        loadNews(message.getSource());
+        loadNews(message.getSource(), mCurrentPage);
     }
 
     private void initUI() {
@@ -87,7 +88,7 @@ public class NewsListFragment extends Fragment {
             @Override
             public void onRefresh() {
                 Toast.makeText(getActivity(), getSource(), Toast.LENGTH_SHORT).show();
-                loadNews(getSource());
+                loadNews(getSource(), mCurrentPage);
             }
         });
 
@@ -101,7 +102,7 @@ public class NewsListFragment extends Fragment {
                 NewsItem newsItem = mAdapter.getItem(position);
                 NewsSelectedMessage message = new NewsSelectedMessage(newsItem.getSource().getTargetUrl(), newsItem.getTitle());
                 EventBus.getDefault().post(message);
-                Log.e(TAG, newsItem.toString());
+                LogUtil.e(TAG, newsItem.toString());
             }
         }));
 
@@ -110,10 +111,11 @@ public class NewsListFragment extends Fragment {
             @Override
             public void onLoadMore() {
                 //add progress item
-                mDataSet.add(null);
-                mAdapter.notifyItemInserted(mDataSet.size() - 1);
-                loadNews(getSource());
-                System.out.println("load");
+//                mDataSet.add(null);
+//                mAdapter.notifyItemInserted(mDataSet.size() - 1);
+//                loadNews(getSource(), mCurrentPage);
+                LogUtil.toast(getActivity(), getString(R.string.loading_more,
+                        SourcesResolver.getBeautifulName(getContext(), getSource())));
             }
         });
         mRecyclerView.setAdapter(mAdapter);
@@ -122,7 +124,8 @@ public class NewsListFragment extends Fragment {
     /**
      * Loads the news from sources.
      */
-    private void loadNews(String source) {
+    private void loadNews(String source, int page) {
+        LogUtil.e("NewsListFragment", "load News");
         mAdapter.updateDataSet(null);
         Call<List<NewsItem>> gitHubNewsCall = GeekAPI.getInstance().getService().getNewsList(source, source.equals(Sources.GITHUB) ? Criteria.POPULAR : Criteria.LATEST, INIT_PAGE, PAGE_SIZE);
         gitHubNewsCall.enqueue(new Callback<List<NewsItem>>() {
@@ -136,12 +139,16 @@ public class NewsListFragment extends Fragment {
 
             @Override
             public void onFailure(Throwable t) {
-                Log.e(TAG, t.getMessage());
+                LogUtil.e(TAG, t.getMessage());
                 mSwipeRefreshLayout.setRefreshing(false);
                 finishLoadingMore();
             }
         });
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(SourcesResolver.getBeautifulName(getActivity(), source));
+        try {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(SourcesResolver.getBeautifulName(getActivity(), source));
+        } catch (NullPointerException ex) {
+            // will not set the title in case of null exception
+        }
     }
 
     private String getSource() {

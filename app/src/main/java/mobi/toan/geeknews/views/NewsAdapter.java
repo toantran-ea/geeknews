@@ -41,6 +41,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         mContext = context;
     }
 
+
+
     public List<NewsItem> getDataSet() {
         return mDataSet;
     }
@@ -94,6 +96,13 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mDataSet.addAll(items);
         }
         notifyDataSetChanged();
+    }
+
+    public void appendDataSet(List<NewsItem> items) {
+        if(items != null) {
+            mDataSet.addAll(items);
+            notifyDataSetChanged();
+        }
     }
 
     @Override
