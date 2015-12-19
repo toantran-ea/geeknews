@@ -3,13 +3,26 @@ package mobi.toan.geeknews.utils;
 import android.content.Context;
 import android.content.res.Resources;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import mobi.toan.geeknews.R;
+import mobi.toan.geeknews.constants.Criteria;
 import mobi.toan.geeknews.constants.Sources;
+import mobi.toan.geeknews.models.Source;
+import mobi.toan.geeknews.models.net.NewsItem;
 
 /**
  * Created by toantran on 10/23/15.
  */
 public class SourcesResolver {
+    public static Map<String, Source> SOURCE_LIST = new HashMap<>();
+    static {
+        SOURCE_LIST = getSourceList();
+    }
+
     public static String resolve(int id) {
         switch (id) {
             case R.id.nav_github:
@@ -149,5 +162,107 @@ public class SourcesResolver {
                 return res.getString(R.string.wired);
         }
         return "";
+    }
+
+    private static Map<String, Source> getSourceList() {
+        Map<String, Source> sources = new HashMap<>();
+
+        Source aListApart = new Source(Criteria.LATEST, Sources.ALISTAPART);
+        sources.put(Sources.ALISTAPART, aListApart);
+
+        Source angleList = new Source(Criteria.BOTH, Sources.ANGEL);
+        sources.put(Sources.ANGEL, angleList);
+
+        Source betaList = new Source(Criteria.LATEST, Sources.BETALIST);
+        sources.put(Sources.BETALIST, betaList);
+
+        Source cssTricks = new Source(Criteria.LATEST, Sources.CSSTRICKS);
+        sources.put(Sources.CSSTRICKS, cssTricks);
+
+        Source dataTau = new Source(Criteria.BOTH, Sources.DATATAU);
+        sources.put(Sources.DATATAU, dataTau);
+
+        Source designerNews = new Source(Criteria.BOTH, Sources.DESIGNERNEWS);
+        sources.put(Sources.DESIGNERNEWS, designerNews);
+
+        Source dzone = new Source(Criteria.LATEST, Sources.DZONE);
+        sources.put(Sources.DZONE, dzone);
+
+        Source echoJS = new Source(Criteria.BOTH, Sources.ECHOJS);
+        sources.put(Sources.ECHOJS, echoJS);
+
+        Source fastCompany = new Source(Criteria.LATEST, Sources.FASTCOMPANY);
+        sources.put(Sources.FASTCOMPANY, fastCompany);
+
+        Source fastCoDesign = new Source(Criteria.BOTH, Sources.FASTCODESIGN);
+        sources.put(Sources.FASTCODESIGN, fastCoDesign);
+
+        Source frontEndFront = new Source(Criteria.BOTH, Sources.FRONTENDFRONT);
+        sources.put(Sources.FRONTENDFRONT, frontEndFront);
+
+        Source github = new Source(Criteria.LATEST, Sources.GITHUB);
+        sources.put(Sources.GITHUB, github);
+
+        Source growthHacker = new Source(Criteria.BOTH, Sources.GROWTHHACKERS);
+        sources.put(Sources.GROWTHHACKERS, growthHacker);
+
+        Source hackerNews = new Source(Criteria.BOTH, Sources.HACKER_NEWS);
+        sources.put(Sources.HACKER_NEWS, hackerNews);
+
+        Source hackingUI = new Source(Criteria.LATEST, Sources.HACKINGUI);
+        sources.put(Sources.HACKINGUI, hackingUI);
+
+        Source inbound = new Source(Criteria.BOTH, Sources.INBOUND);
+        sources.put(Sources.INBOUND, inbound);
+
+        Source littleBigDetails = new Source(Criteria.LATEST, Sources.LITTLEBIGDETAILS);
+        sources.put(Sources.LITTLEBIGDETAILS, littleBigDetails);
+
+        Source lobster = new Source(Criteria.BOTH, Sources.LOBSTERS);
+        sources.put(Sources.LOBSTERS, lobster);
+
+        Source mashable = new Source(Criteria.LATEST, Sources.MASHABLE);
+        sources.put(Sources.MASHABLE, mashable);
+
+        Source medium = new Source(Criteria.BOTH, Sources.MEDIUM);
+        sources.put(Sources.MEDIUM, medium);
+
+        Source productHunt = new Source(Criteria.LATEST, Sources.PRODUCT_HUNT);
+        sources.put(Sources.PRODUCT_HUNT, productHunt);
+
+        Source recode = new Source(Criteria.LATEST, Sources.RECODE);
+        sources.put(Sources.RECODE, recode);
+
+        Source researchers = new Source(Criteria.BOTH, Sources.RESEARCHERS);
+        sources.put(Sources.RESEARCHERS, researchers);
+
+        Source sideBar = new Source(Criteria.LATEST, Sources.SIDEBAR);
+        sources.put(Sources.SIDEBAR, sideBar);
+
+        Source smashing = new Source(Criteria.LATEST, Sources.SMASHINGMAGAZINE);
+        sources.put(Sources.SMASHINGMAGAZINE, smashing);
+
+        Source swissMiss = new Source(Criteria.LATEST, Sources.SWISSMISS);
+        sources.put(Sources.SWISSMISS, swissMiss);
+
+        Source techcrunch = new Source(Criteria.LATEST, Sources.TECHCRUNCH);
+        sources.put(Sources.TECHCRUNCH, techcrunch);
+
+        Source theNextWeb = new Source(Criteria.LATEST, Sources.THENEXTWEB);
+        sources.put(Sources.THENEXTWEB, theNextWeb);
+
+        Source theVerge = new Source(Criteria.LATEST, Sources.THEVERGE);
+        sources.put(Sources.THEVERGE, theVerge);
+
+        Source uxHandy = new Source(Criteria.LATEST, Sources.UXHANDY);
+        sources.put(Sources.UXHANDY, uxHandy);
+
+        Source webDesigner = new Source(Criteria.BOTH, Sources.WEBDESIGNERNEWS);
+        sources.put(Sources.WEBDESIGNERNEWS, webDesigner);
+
+        Source wired = new Source(Criteria.LATEST, Sources.WIRED);
+        sources.put(Sources.WIRED, wired);
+
+        return sources;
     }
 }

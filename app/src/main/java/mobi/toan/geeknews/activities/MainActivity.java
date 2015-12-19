@@ -71,7 +71,7 @@ public class MainActivity extends BaseApplicationActivity implements NavigationV
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Toast.makeText(this, "Change the source list", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Change the sourceId list", Toast.LENGTH_SHORT).show();
             return true;
         }
 

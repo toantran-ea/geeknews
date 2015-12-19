@@ -3,10 +3,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/criteria_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:background="@drawable/text_view_selected_state"
+            android:id="@+id/tab_popular"
+            style="@style/tab_text_view"
+            android:text="@string/popular" />
+
+        <TextView
+            android:background="@drawable/text_view_unselected_state"
+            android:id="@+id/tab_latest"
+            style="@style/tab_text_view"
+            android:text="@string/latest" />
+    </LinearLayout>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/criteria_tab">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/news_list"

@@ -62,7 +62,7 @@ public class NewsItem {
         return "NewsItem{" +
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", source=" + source +
+                ", sourceId=" + source +
                 '}';
     }
 }

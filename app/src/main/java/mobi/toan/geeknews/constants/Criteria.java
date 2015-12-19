@@ -6,4 +6,5 @@ package mobi.toan.geeknews.constants;
 public interface Criteria {
     String POPULAR = "popular";
     String LATEST = "latest";
+    String BOTH = "both";
 }

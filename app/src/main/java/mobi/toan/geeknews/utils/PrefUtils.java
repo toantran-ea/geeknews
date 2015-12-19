@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import mobi.toan.geeknews.constants.Constants;
+import mobi.toan.geeknews.constants.Criteria;
 import mobi.toan.geeknews.constants.Sources;
 
 /**
@@ -23,6 +24,19 @@ public class PrefUtils {
     public static String getSource() {
         checkInitState();
         return sSharedPreferences.getString(Constants.SOURCE, Sources.GITHUB);
+    }
+
+    public static void saveCriteria(String sourceId, String criteria) {
+        sSharedPreferences.edit().putString(sourceId, criteria).apply();
+    }
+
+    /**
+     * Default is LATEST
+     * @param sourceId
+     * @return
+     */
+    public static String getCriteria(String sourceId) {
+        return sSharedPreferences.getString(sourceId, Criteria.LATEST);
     }
 
     private static void checkInitState() {

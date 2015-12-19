@@ -4,17 +4,17 @@ package mobi.toan.geeknews.models.bus;
  * Created by toantran on 10/23/15.
  */
 public class SourceSelectedMessage {
-    public String source;
+    public String sourceId;
 
-    public SourceSelectedMessage(String source) {
-        setSource(source);
+    public SourceSelectedMessage(String sourceId) {
+        setSourceId(sourceId);
     }
 
-    public String getSource() {
-        return source;
+    public String getSourceId() {
+        return sourceId;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
     }
 }

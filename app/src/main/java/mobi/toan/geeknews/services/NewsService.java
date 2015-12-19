@@ -15,6 +15,6 @@ import retrofit.http.Query;
 public interface NewsService {
 
     @Headers("Content-Type: application/json")
-    @GET("/v1/sources/{source}/{criteria}")
-    Call<List<NewsItem>> getNewsList(@Path("source") String source, @Path("criteria") String criteria, @Query("page") int page, @Query("size") int size);
+    @GET("/v1/sources/{sourceId}/{criteria}")
+    Call<List<NewsItem>> getNewsList(@Path("sourceId") String source, @Path("criteria") String criteria, @Query("page") int page, @Query("size") int size);
 }
