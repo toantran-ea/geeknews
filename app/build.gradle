@@ -9,13 +9,31 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
     }
+
+    productFlavors {
+        development {
+            applicationId "mobi.toan.geeknews.development"
+            versionName "0.1.0"
+        }
+
+        production {
+            applicationId "mobi.toan.geeknews"
+            versionName "0.1.0"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    buildTypes.each {
+        it.buildConfigField 'String', 'HOCKEY_APP_ID', formString(System.getenv("HOCKEY_APP_ID"))
+        it.buildConfigField 'String', 'HOCKEY_APP_SECRET', formString(System.getenv("HOCKEY_APP_SECRET"))
+        it.buildConfigField 'String', 'HOCKEY_APP_API_TOKEN', formString(System.getenv("HOCKEY_APP_API_TOKEN"))
     }
 
     packagingOptions {
@@ -47,7 +65,13 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.4.0'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.4.2'
 
+    compile 'net.hockeyapp.android:HockeySDK:3.5.0'
 
     compile 'de.greenrobot:eventbus:2.4.0'
     compile project(":libs:snailbar")
 }
+
+String formString(String target) {
+    return "\"" + target + "\""
+}
+

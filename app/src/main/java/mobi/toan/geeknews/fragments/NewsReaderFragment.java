@@ -3,6 +3,7 @@ package mobi.toan.geeknews.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -106,7 +107,10 @@ public class NewsReaderFragment extends Fragment {
             @Override
             @Nullable
             public void onReceivedTitle(WebView view, String title) {
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
+                ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+                if(actionBar != null) {
+                    actionBar.setTitle(title);
+                }
             }
         });
 
