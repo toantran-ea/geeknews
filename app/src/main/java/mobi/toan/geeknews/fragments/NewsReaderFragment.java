@@ -12,15 +12,10 @@ import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.cjj.SnailBar;
-
-import de.greenrobot.event.EventBus;
 import mobi.toan.geeknews.R;
-import mobi.toan.geeknews.models.bus.BackPressedEvent;
-import mobi.toan.geeknews.utils.PrefUtils;
-import mobi.toan.geeknews.utils.SourcesResolver;
 
 /**
  * Created by toantran on 10/21/15.
@@ -29,7 +24,6 @@ public class NewsReaderFragment extends Fragment {
     private static final String TARGET_URL = "target-url";
     private static final String TAG = NewsReaderFragment.class.getSimpleName();
     private static final int HIDE_PROGRESS_LEVEL = 80;
-    private View mRootView;
     private String mTargetUrl;
     private WebView mWebView;
 
@@ -51,34 +45,30 @@ public class NewsReaderFragment extends Fragment {
         if (bundle != null && bundle.containsKey(TARGET_URL)) {
             mTargetUrl = bundle.getString(TARGET_URL);
         }
-        EventBus.getDefault().register(this);
-    }
-
-    public void onEvent(BackPressedEvent event) {
-        if (mWebView.canGoBack()) {
-            mWebView.goBack();
-        } else {
-            getActivity().finish();
-        }
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.fragment_news_detail, container, false);
-        return mRootView;
+        return inflater.inflate(R.layout.fragment_news_detail, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        displayWebViewContent(view);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        loadUrl();
     }
 
-    private void loadUrl() {
-        mWebView = (WebView) mRootView.findViewById(R.id.web_view);
-        final SnailBar progressBar = (SnailBar) mRootView.findViewById(R.id.progress_bar);
-
+    private void displayWebViewContent(View view) {
+        mWebView = (WebView) view.findViewById(R.id.web_view);
+        final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.web_progress_bar);
+        progressBar.setIndeterminate(false);
+        progressBar.setMax(100);
         mWebView.setInitialScale(1);
         mWebView.getSettings().setLoadWithOverviewMode(true);
         mWebView.getSettings().setUseWideViewPort(true);
@@ -108,7 +98,7 @@ public class NewsReaderFragment extends Fragment {
             @Nullable
             public void onReceivedTitle(WebView view, String title) {
                 ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-                if(actionBar != null) {
+                if (actionBar != null) {
                     actionBar.setTitle(title);
                 }
             }

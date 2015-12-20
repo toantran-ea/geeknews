@@ -9,7 +9,6 @@ import de.greenrobot.event.EventBus;
 import mobi.toan.geeknews.R;
 import mobi.toan.geeknews.constants.Constants;
 import mobi.toan.geeknews.fragments.NewsReaderFragment;
-import mobi.toan.geeknews.models.bus.BackPressedEvent;
 
 /**
  * Created by toantran on 10/25/15.
@@ -41,12 +40,6 @@ public class NewsReaderActivity extends BaseApplicationActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        BackPressedEvent event = new BackPressedEvent();
-        EventBus.getDefault().post(event);
     }
 
     @Override

@@ -68,7 +68,6 @@ dependencies {
     compile 'net.hockeyapp.android:HockeySDK:3.5.0'
 
     compile 'de.greenrobot:eventbus:2.4.0'
-    compile project(":libs:snailbar")
 }
 
 String formString(String target) {
