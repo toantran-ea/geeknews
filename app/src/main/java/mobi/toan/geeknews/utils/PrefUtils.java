@@ -34,7 +34,7 @@ public class PrefUtils {
         if(isBookmarked) {
             sSharedPreferences.edit().putBoolean(url, true).apply();
         } else {
-            sSharedPreferences.edit().remove(url);
+            sSharedPreferences.edit().remove(url).apply();
         }
     }
 

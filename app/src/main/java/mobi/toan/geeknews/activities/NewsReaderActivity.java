@@ -11,7 +11,6 @@ import de.greenrobot.event.EventBus;
 import mobi.toan.geeknews.R;
 import mobi.toan.geeknews.constants.Constants;
 import mobi.toan.geeknews.fragments.NewsReaderFragment;
-import mobi.toan.geeknews.models.net.NewsItem;
 import mobi.toan.geeknews.utils.PrefUtils;
 
 /**
@@ -50,6 +49,8 @@ public class NewsReaderActivity extends BaseApplicationActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_news_reader, menu);
+        MenuItem item = menu.findItem(R.id.menu_bookmark);
+        updateMenuState(item, checkBookmarked(mTargetUrl));
         return super.onCreateOptionsMenu(menu);
     }
 
