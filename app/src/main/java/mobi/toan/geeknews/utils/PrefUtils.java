@@ -30,6 +30,18 @@ public class PrefUtils {
         sSharedPreferences.edit().putString(sourceId, criteria).apply();
     }
 
+    public static void saveBookmark(String url, boolean isBookmarked) {
+        if(isBookmarked) {
+            sSharedPreferences.edit().putBoolean(url, true).apply();
+        } else {
+            sSharedPreferences.edit().remove(url);
+        }
+    }
+
+    public static boolean isBookmarked(String url) {
+        return sSharedPreferences.getBoolean(url, false);
+    }
+
     /**
      * Default is LATEST
      * @param sourceId
