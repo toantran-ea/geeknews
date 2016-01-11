@@ -2,10 +2,12 @@ language: android
 jdk: openjdk7
 android:
   components:
+    - tools
     - build-tools-23.0.2
     - android-23
     - extra
     - addon
+    - extra-android-m2repository
     - sys-img-armeabi-v7a-android-19
 before_script:
   - echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a
