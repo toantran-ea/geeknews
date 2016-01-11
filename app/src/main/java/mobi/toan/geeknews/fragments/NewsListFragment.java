@@ -53,7 +53,6 @@ public class NewsListFragment extends Fragment {
     private View mPopularTabView;
     private View mLatestTabView;
     private List<NewsItem> mDataSet = new ArrayList<>();
-    private int mCurrentPage = INIT_PAGE;
 
     public static NewsListFragment newInstance() {
         return new NewsListFragment();
@@ -91,12 +90,12 @@ public class NewsListFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        loadNews(getSourceId(), mCurrentPage);
+        loadNews(getSourceId());
         displayCriteriaTabBar(getSourceId());
     }
 
     public void onEvent(SourceSelectedMessage message) {
-        loadNews(message.getSourceId(), mCurrentPage);
+        loadNews(message.getSourceId());
         displayCriteriaTabBar(message.getSourceId());
     }
 
@@ -120,7 +119,7 @@ public class NewsListFragment extends Fragment {
                     mPopularTabView.setBackgroundResource(R.drawable.text_view_selected_state);
                 }
 
-                loadNews(getSourceId(), mCurrentPage);
+                loadNews(getSourceId());
             }
         });
     }
@@ -138,29 +137,22 @@ public class NewsListFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
-        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
+                DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
+                new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 NewsItem newsItem = mAdapter.getItem(position);
-                NewsSelectedMessage message = new NewsSelectedMessage(newsItem.getSource().getTargetUrl(), newsItem.getTitle());
+                NewsSelectedMessage message =
+                        new NewsSelectedMessage(newsItem.getSource().getTargetUrl(),
+                                newsItem.getTitle());
                 EventBus.getDefault().post(message);
                 LogUtil.e(TAG, newsItem.toString());
             }
         }));
 
         mAdapter = new NewsAdapter(getActivity(), mDataSet);
-        mAdapter.setOnLoadMoreListener(new NewsAdapter.OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                //add progress item
-//                mDataSet.add(null);
-//                mAdapter.notifyItemInserted(mDataSet.size() - 1);
-//                loadNews(getSourceId(), mCurrentPage);
-//                LogUtil.toast(getActivity(), getString(R.string.loading_more,
-//                        SourcesResolver.getBeautifulName(getContext(), getSourceId())));
-            }
-        });
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -170,7 +162,7 @@ public class NewsListFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadNews(getSourceId(), mCurrentPage);
+                loadNews(getSourceId());
             }
         });
     }
@@ -180,7 +172,7 @@ public class NewsListFragment extends Fragment {
         mPopularTabView = view.findViewById(R.id.tab_popular);
         mLatestTabView = view.findViewById(R.id.tab_latest);
 
-        View.OnClickListener tabViewClickListerner = new View.OnClickListener() {
+        View.OnClickListener tabViewClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
@@ -202,30 +194,29 @@ public class NewsListFragment extends Fragment {
                 displayCriteriaTabBar(getSourceId());
             }
         };
-        mPopularTabView.setOnClickListener(tabViewClickListerner);
-        mLatestTabView.setOnClickListener(tabViewClickListerner);
+        mPopularTabView.setOnClickListener(tabViewClickListener);
+        mLatestTabView.setOnClickListener(tabViewClickListener);
     }
 
     /**
      * Loads the news from sources.
      */
-    private void loadNews(String source, int page) {
+    private void loadNews(String source) {
         mAdapter.updateDataSet(null);
-        Call<List<NewsItem>> gitHubNewsCall = GeekAPI.getInstance().getService().getNewsList(source, PrefUtils.getCriteria(getSourceId()), INIT_PAGE, PAGE_SIZE);
+        Call<List<NewsItem>> gitHubNewsCall = GeekAPI.getInstance().getService().getNewsList(source,
+                PrefUtils.getCriteria(getSourceId()), INIT_PAGE, PAGE_SIZE);
         gitHubNewsCall.enqueue(new Callback<List<NewsItem>>() {
             @Override
             public void onResponse(Response<List<NewsItem>> response, Retrofit retrofit) {
                 mAdapter.updateDataSet(response.body());
                 mRecyclerView.scrollToPosition(0);
                 mSwipeRefreshLayout.setRefreshing(false);
-                finishLoadingMore();
             }
 
             @Override
             public void onFailure(Throwable t) {
                 LogUtil.e(TAG, t.getMessage());
                 mSwipeRefreshLayout.setRefreshing(false);
-                finishLoadingMore();
             }
         });
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -237,18 +228,5 @@ public class NewsListFragment extends Fragment {
     private String getSourceId() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SETTINGS, Context.MODE_PRIVATE);
         return sharedPreferences.getString(Constants.SOURCE, Sources.GITHUB);
-    }
-
-    private void finishLoadingMore() {
-        if (mAdapter.isLoading()) {
-            mDataSet.remove(mDataSet.size() - 1);
-            mAdapter.notifyItemRemoved(mDataSet.size());
-            //add items one by one
-            for (int i = 0; i < mDataSet.size(); i++) {
-                mAdapter.notifyItemInserted(mDataSet.size());
-            }
-            mAdapter.setLoaded();
-            //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
-        }
     }
 }

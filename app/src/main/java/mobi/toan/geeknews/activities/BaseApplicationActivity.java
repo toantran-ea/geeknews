@@ -1,6 +1,5 @@
 package mobi.toan.geeknews.activities;
 
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 
 import net.hockeyapp.android.CrashManager;

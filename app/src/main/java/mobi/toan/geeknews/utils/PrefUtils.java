@@ -16,6 +16,10 @@ public class PrefUtils {
         sSharedPreferences =  context.getSharedPreferences(Constants.SETTINGS, Context.MODE_PRIVATE);
     }
 
+    public static void reset() {
+        sSharedPreferences.edit().clear().apply();
+    }
+
     public static void saveSource(String source) {
         checkInitState();
         sSharedPreferences.edit().putString(Constants.SOURCE, source).commit();

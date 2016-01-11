@@ -1,7 +1,6 @@
 package mobi.toan.geeknews.views;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,13 +23,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<NewsItem> mDataSet;
     private Context mContext;
-    // The minimum amount of items to have below your current scroll position before loading more.
-    private int visibleThreshold = 2;
-    private int lastVisibleItem, totalItemCount;
-    private boolean loading;
-    private OnLoadMoreListener onLoadMoreListener;
-    private RecyclerView.OnScrollListener mOnScrollListener;
-
 
     public NewsAdapter(Context context, List<NewsItem> dataSet) {
         if(dataSet != null) {
@@ -41,53 +33,9 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         mContext = context;
     }
 
-
-
-    public List<NewsItem> getDataSet() {
-        return mDataSet;
-    }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
-
-            final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-
-                    totalItemCount = linearLayoutManager.getItemCount();
-                    lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-                    if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-                        // End has been reached
-                        // Do something
-                        if (onLoadMoreListener != null) {
-                            onLoadMoreListener.onLoadMore();
-                        }
-                        loading = true;
-                    }
-                }
-            });
-        }
-    }
-
     @Override
     public int getItemViewType(int position) {
         return mDataSet.get(position) != null ? VIEW_ITEM : VIEW_PROG;
-    }
-
-    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
-        this.onLoadMoreListener = onLoadMoreListener;
-    }
-
-    public void setLoaded() {
-        loading = false;
-    }
-
-    public boolean isLoading() {
-        return loading;
     }
 
     public void updateDataSet(List<NewsItem> items) {
@@ -96,13 +44,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mDataSet.addAll(items);
         }
         notifyDataSetChanged();
-    }
-
-    public void appendDataSet(List<NewsItem> items) {
-        if(items != null) {
-            mDataSet.addAll(items);
-            notifyDataSetChanged();
-        }
     }
 
     @Override
@@ -165,9 +106,4 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             progressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
         }
     }
-
-    public interface OnLoadMoreListener {
-        void onLoadMore();
-    }
-
 }

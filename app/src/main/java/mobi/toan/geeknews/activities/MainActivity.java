@@ -6,6 +6,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -44,7 +45,7 @@ public class MainActivity extends BaseApplicationActivity implements NavigationV
 
         EventBus.getDefault().register(this);
 
-        getSupportActionBar().setTitle(SourcesResolver.getBeautifulName(this, getSource()));
+        displayCorrectActionBar();
     }
 
     @Override
@@ -61,7 +62,7 @@ public class MainActivity extends BaseApplicationActivity implements NavigationV
 
     @Override
     public void onBackPressed() {
-        getSupportActionBar().setTitle(SourcesResolver.getBeautifulName(this, getSource()));
+        displayCorrectActionBar();
         super.onBackPressed();
     }
 
@@ -78,6 +79,12 @@ public class MainActivity extends BaseApplicationActivity implements NavigationV
         return true;
     }
 
+    private void displayCorrectActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setTitle(SourcesResolver.getBeautifulName(this, getSource()));
+        }
+    }
 
 }
 
